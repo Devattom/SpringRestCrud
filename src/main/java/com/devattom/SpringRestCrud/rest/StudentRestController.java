@@ -20,8 +20,32 @@ public class StudentRestController {
     }
 
     @GetMapping("/students")
-    public List<Student> getStudents()
+    public List<Student> get()
     {
         return studentService.findAll();
+    }
+
+    @GetMapping("/students/{id}")
+    public Student getById(@PathVariable int id)
+    {
+        Student student = studentService.findById(id);
+
+        if(student == null) {
+            throw new StudentNotFoundException("Student with id: " + id + " not found");
+        }
+
+        return student;
+    }
+
+    @PostMapping("/students")
+    public Student create(@RequestBody Student newStudent)
+    {
+        return studentService.save(newStudent);
+    }
+
+    @DeleteMapping("/students/{id}")
+    public void delete(@PathVariable int id)
+    {
+        studentService.deleteById(id);
     }
 }

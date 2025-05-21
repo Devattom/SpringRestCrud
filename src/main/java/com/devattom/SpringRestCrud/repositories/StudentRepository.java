@@ -27,4 +27,20 @@ public class StudentRepository implements StudentDAO {
         );
         return query.getResultList();
     }
+
+    @Override
+    public Student findById(int id) {
+        return entityManager.find(Student.class, id);
+    }
+
+    @Override
+    public Student save(Student student) {
+        return entityManager.merge(student);
+    }
+
+    @Override
+    public void deleteById(int id) {
+        Student student = findById(id);
+        entityManager.remove(student);
+    }
 }
