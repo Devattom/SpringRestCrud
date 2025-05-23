@@ -2,6 +2,7 @@ package com.devattom.SpringRestCrud.repositories;
 
 import com.devattom.SpringRestCrud.DAO.StudentDAO;
 import com.devattom.SpringRestCrud.entity.Student;
+import com.devattom.SpringRestCrud.rest.StudentNotFoundException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +42,11 @@ public class StudentRepository implements StudentDAO {
     @Override
     public void deleteById(int id) {
         Student student = findById(id);
+
+        if (student == null) {
+            throw new StudentNotFoundException("enable to find the student");
+        }
+
         entityManager.remove(student);
     }
 }
