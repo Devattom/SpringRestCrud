@@ -6,39 +6,18 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.provisioning.JdbcUserDetailsManager;
+import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+
+import javax.sql.DataSource;
 
 @Configuration
 public class SecurityConfig {
-
     @Bean
-    public InMemoryUserDetailsManager userDetailsManager()
-    {
-        UserDetails toto = User.builder()
-                .username("toto")
-                .password("{noop}Test123.")
-                .roles("STUDENT")
-                .build();
-
-        UserDetails luz = User.builder()
-                .username("luz")
-                .password("{noop}Test123.")
-                .roles("STUDENT", "MENTOR")
-                .build();
-
-        UserDetails david = User.builder()
-                .username("david")
-                .password("{noop}Test123.")
-                .roles("STUDENT", "MENTOR", "ADMIN")
-                .build();
-
-
-        return new InMemoryUserDetailsManager(toto, luz, david);
+    public UserDetailsManager userDetailsManager(DataSource dataSource) {
+        return new JdbcUserDetailsManager(dataSource);
     }
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception
     {
@@ -57,4 +36,29 @@ public class SecurityConfig {
 
         return http.build();
     }
+
+    //    @Bean
+//    public InMemoryUserDetailsManager userDetailsManager()
+//    {
+//        UserDetails toto = User.builder()
+//                .username("toto")
+//                .password("{noop}Test123.")
+//                .roles("STUDENT")
+//                .build();
+//
+//        UserDetails luz = User.builder()
+//                .username("luz")
+//                .password("{noop}Test123.")
+//                .roles("STUDENT", "MENTOR")
+//                .build();
+//
+//        UserDetails david = User.builder()
+//                .username("david")
+//                .password("{noop}Test123.")
+//                .roles("STUDENT", "MENTOR", "ADMIN")
+//                .build();
+//
+//
+//        return new InMemoryUserDetailsManager(toto, luz, david);
+//    }
 }
